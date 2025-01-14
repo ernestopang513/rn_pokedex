@@ -58,7 +58,7 @@ export const ThemeContextProvider = ({ children }: PropsWithChildren) => {
     // console.log({isDark})
 
 
-    console.log(JSON.stringify(NavigationDarkTheme, null, 3))
+    // console.log(JSON.stringify(NavigationDarkTheme, null, 3))
     
     return (
         <PaperProvider theme={CombinedTheme}  >
