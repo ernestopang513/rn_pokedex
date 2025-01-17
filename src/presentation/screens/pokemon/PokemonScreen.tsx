@@ -31,7 +31,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
 
   const {pokemonId} = route.params;
 
-
+  console.log(typeof(pokemonId))
   const pokeballImg = isDark
     ? require('../../../assets/pokeball-light.png')
     : require('../../../assets/pokeball-dark.png');
@@ -42,7 +42,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
     queryFn: () => getPokemonById(pokemonId),
     staleTime: 1000 * 60 * 60, // 1 hour
   })
-
+  console.log(pokemon?.sprites)
   if (!pokemon) {
     return (
       <FullScreenLoader/>
