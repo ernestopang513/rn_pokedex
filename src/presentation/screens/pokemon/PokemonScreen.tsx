@@ -1,7 +1,7 @@
 
 import { RouteProp, useRoute } from "@react-navigation/native"
-import { FlatList, Image, ScrollView, StyleSheet, View } from "react-native"
-import { Chip, Text } from "react-native-paper"
+import { FlatList, Image, ScrollView, StyleSheet, useWindowDimensions, View } from "react-native"
+import { ActivityIndicator, Chip, Text } from "react-native-paper"
 import { RootStackParams } from "../../navigator/StackNavigator"
 import { StackScreenProps } from "@react-navigation/stack"
 import { useQuery } from "@tanstack/react-query"
@@ -13,6 +13,7 @@ import { FadeInImage } from "../../components/ui/FadeInImage"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useContext } from "react"
 import { ThemeContext } from "../../context/ThemeContext"
+import FastImage from "react-native-fast-image"
 
 interface Props extends StackScreenProps<RootStackParams, 'PokemonScreen'>{}
 
@@ -23,9 +24,11 @@ export const PokemonScreen = ({navigation, route}: Props) => {
   // const route =useRoute<RouteProp<RootStackParams, 'PokemonScreen'>>()
   // const {pokemonId} = route.params
 
-  const {isDark, theme} = useContext(ThemeContext)
+  const {height} = useWindowDimensions();
 
-  console.log(JSON.stringify(theme,null,4))
+  const {isDark, theme} = useContext(ThemeContext);
+
+  console.log(JSON.stringify(theme,null,4));
 
   const {top} = useSafeAreaInsets();
 
@@ -101,10 +104,22 @@ export const PokemonScreen = ({navigation, route}: Props) => {
             style={{ width: 100, height: 100, marginHorizontal: 5 }}
           />
         )}
+
+        
       />
 
+      <FastImage
+        style={{width: 60, height: 60, position: 'absolute',right: 20, top: 20}}
+        source={{
+          // uri: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/6.gif",
+          uri: pokemon.sprites[pokemon.sprites.length-2],
+          priority: FastImage.priority.normal,
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+      />
 
       <View style={{ height: 100 }} />
+
     </ScrollView>
   )
 }
