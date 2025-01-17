@@ -1,4 +1,5 @@
 import ImageColors from "react-native-image-colors";
+import { darkenColor } from "./darkenColor";
 
 export const getColorFromImage = async(image: string) => {
 
@@ -9,9 +10,20 @@ export const getColorFromImage = async(image: string) => {
     });
 
 
+    // switch (colors.platform) {
+    //     case 'android':
+    //         return colors.dominant ?? fallbackColor
+
+    //     case 'ios': 
+    //         return colors.background ?? fallbackColor;
+    //     default: 
+    //         return fallbackColor;
+    // }
+
     switch (colors.platform) {
         case 'android':
-            return colors.dominant ?? fallbackColor
+            return darkenColor(colors.dominant) ?? fallbackColor
+            // return colors.dominant ?? fallbackColor
 
         case 'ios': 
             return colors.background ?? fallbackColor;

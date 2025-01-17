@@ -24,17 +24,13 @@ export const PokemonScreen = ({navigation, route}: Props) => {
   // const route =useRoute<RouteProp<RootStackParams, 'PokemonScreen'>>()
   // const {pokemonId} = route.params
 
-  const {height} = useWindowDimensions();
-
   const {isDark, theme} = useContext(ThemeContext);
 
-  console.log(JSON.stringify(theme,null,4));
 
   const {top} = useSafeAreaInsets();
 
   const {pokemonId} = route.params;
 
-  console.log(typeof(pokemonId))
   const pokeballImg = isDark
     ? require('../../../assets/pokeball-light.png')
     : require('../../../assets/pokeball-dark.png');
@@ -45,12 +41,14 @@ export const PokemonScreen = ({navigation, route}: Props) => {
     queryFn: () => getPokemonById(pokemonId),
     staleTime: 1000 * 60 * 60, // 1 hour
   })
-  console.log(pokemon?.sprites)
   if (!pokemon) {
     return (
       <FullScreenLoader/>
     )
   }
+
+  // console.log(pokemon.color)
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: pokemon.color }}
