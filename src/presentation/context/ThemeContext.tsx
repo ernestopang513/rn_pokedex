@@ -14,7 +14,7 @@ import { adaptNavigationTheme,
 } from 'react-native-paper';
 
 import { useColorScheme } from "react-native";
-  
+  // La siguiente función adapta colores de los temas del NavigationContainer a los colores de react-native paper
   const { LightTheme, DarkTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
     reactNavigationDark: NavigationDarkTheme,
@@ -31,10 +31,13 @@ export const ThemeContext = createContext({
 
 export const ThemeContextProvider = ({ children }: PropsWithChildren) => {
 
+  // En este hook de useColorScheme obtenemos el color del sistema operativo del celular
+  // con un string en minusculas
     const colorScheme = useColorScheme();
 
     const isDark = colorScheme === 'dark';
-
+//Para combinar los temas use el esquema del tema material design 3 de react native paper el cual es mas complejo
+// y solo voy anexando los colores y fuentes que usan React navigation 
     const CombinedTheme = {
       ...MD3DarkTheme,
       colors: {

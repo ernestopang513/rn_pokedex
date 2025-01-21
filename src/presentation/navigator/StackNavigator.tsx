@@ -5,6 +5,8 @@ import { HomeScreen } from "../screens/home/HomeScreen";
 import { PokemonScreen } from "../screens/pokemon/PokemonScreen";
 import { SearchScreen } from "../screens/search/SearchScreen";
 
+// Este type me permite tener autocompletado en los diferentes screens
+// Limitó el tipo, la cantidad de rutas y el tipo y cantidad de parametros
 export type RootStackParams = {
   HomeScreen: undefined;
   PokemonScreen: {pokemonId: number};

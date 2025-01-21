@@ -6,7 +6,6 @@ import { PokeballBg } from "../../components/ui/PokeballBg"
 import { globalTheme } from "../../../config/theme/global-theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { PokemonCard } from "../../components/pokemons/PokemonCard"
-import { Pokemon } from "../../../domain/entities/pokemon"
 import { useContext } from "react"
 import { ThemeContext } from "../../context/ThemeContext"
 
@@ -24,7 +23,8 @@ export const HomeScreen = () => {
   //   staleTime: 1000 * 60 * 60
   // });
   
-  
+  // ! Para esta función de useQuery es importante tener al final getNextPageParam
+  //! Sí no, no infiere el tipo de dato de pokémon
   const { isLoading, data, fetchNextPage}  = useInfiniteQuery({
     queryKey: ['pokemon', 'infinite'],
     staleTime: 1000 * 60 * 60, // 60 minutos
@@ -50,15 +50,20 @@ export const HomeScreen = () => {
         <PokeballBg style={styles.imgPosition} />
         
         <FlatList
+          //* Aqui data es un arreglo de tipo pokémon
           data={data?.pages.flat() ?? []}
+          //* En este KeyExtractor es de tipo iterativo e itera el arreglo que meto en data
           keyExtractor={(pokemon,index)=> `${pokemon.id}-${index}`}
           numColumns={2}
           style={{paddingTop: top + 20}}
+          //* En este caso tuve que usar el contentContainerStyle por que el ListFooterComponent se cortaba devido al paddingTop que toma
+          //* el top + 20 por lo tanto compensa lo tomado para que el ultimo elemento aparesca por completo
           contentContainerStyle = {{paddingBottom: top + 20}}
-          // style={{paddingVertical: top + 20}}
           ListHeaderComponent={()=>(
             <Text variant="displayMedium">Pokédex</Text>
           )}
+          //* Aqui el item que se pasa es un objeto del arreglo data el tipado lo verifica el 
+          //* componente PokemonCard dentro de el esta la interface Prop que contiene pokemon con tipo de dato Pokémon
           renderItem={({item}) => <PokemonCard pokemon={item}/>}
           onEndReachedThreshold={0.6}
           onEndReached={() => fetchNextPage()}

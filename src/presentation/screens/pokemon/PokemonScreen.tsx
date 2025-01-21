@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getPokemonById } from "../../../actions/pokemons"
 import { Pokemon } from '../../../domain/entities/pokemon';
 import { FullScreenLoader } from "../../components/ui/FullScreenLoader"
-import { Formatter } from "../../../config/helpers/formatter"
+import { Formatter } from '../../../config/helpers/formatter';
 import { FadeInImage } from "../../components/ui/FadeInImage"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useContext } from "react"
@@ -114,6 +114,78 @@ export const PokemonScreen = ({navigation, route}: Props) => {
           priority: FastImage.priority.normal,
         }}
         resizeMode={FastImage.resizeMode.contain}
+      />
+
+      
+
+      <Text style={styles.subTitle}>Abilities</Text>
+      <FlatList
+
+        data={pokemon.abilities}
+        horizontal
+        keyExtractor={item => item}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item}) => (
+          <Chip style={{marginLeft: 10}} selectedColor={theme.colors.text}>{Formatter.capitalize(item)}</Chip>
+        )}
+
+      />
+
+      <View style={{ height: 20 }} />
+
+      
+      <Text style={styles.subTitle}>Stats</Text>
+
+      <FlatList
+      data={pokemon.stats}
+      keyExtractor={item => item.name}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      renderItem={({item})=>(
+        <View style={styles.statsContainer}>
+          <Text style={{flex: 1, color: 'white'}}>
+            {Formatter.capitalize(item.name)}
+          </Text>
+          <Text style={{color: 'white'}}>{item.value}</Text>
+        </View>
+      )}
+      />
+
+      <View style={{ height: 20 }} />
+
+      
+      <Text style={styles.subTitle}>Moves</Text>
+
+      <FlatList
+      data={pokemon.moves}
+      keyExtractor={item => item.name}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      renderItem={({item})=>(
+        <View style={styles.statsContainer}>
+          <Text style={{flex: 1, color: 'white'}}>
+            {Formatter.capitalize(item.name)}
+          </Text>
+          <Text style={{color: 'white'}}>lvl {item.level}</Text>
+        </View>
+      )}
+      />
+
+      <View style={{ height: 20 }} />
+
+
+      <Text style={styles.subTitle}>Games</Text>
+
+      <FlatList
+
+        data={pokemon.games}
+        horizontal
+        keyExtractor={item => item}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({item}) => (
+          <Chip style={{marginLeft: 10}} selectedColor={theme.colors.text}>{Formatter.capitalize(item)}</Chip>
+        )}
+
       />
 
       <View style={{ height: 100 }} />
