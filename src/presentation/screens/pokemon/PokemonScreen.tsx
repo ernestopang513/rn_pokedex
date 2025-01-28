@@ -47,7 +47,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
     )
   }
 
-  console.log(pokemon.sprites)
+  console.log(pokemon.id)
 
   return (
     <ScrollView
@@ -89,19 +89,25 @@ export const PokemonScreen = ({navigation, route}: Props) => {
       <FlatList
         data={pokemon.sprites}
         horizontal
-        keyExtractor={item => item}
+        keyExtractor={(item, index) => (item ?? `temp-${index}`)}
         showsHorizontalScrollIndicator={false}
         centerContent
         style={{
           marginTop: 20,
           height: 100,
         }}
-        renderItem={({ item }) => (
+        renderItem={({ item }) =>{ 
+          
+          // if(!item) return (<Text style={{alignSelf: 'center'}}>No image</Text>)
+            
+          if(!item) return (<Image source={pokeballImg} style={{width: 40, height: 40, marginHorizontal: 5, alignSelf: 'center'}} />)
+          
+            return (
           <FadeInImage
             uri={item}
             style={{ width: 100, height: 100, marginHorizontal: 5 }}
           />
-        )}
+        )}}
 
         
       />
@@ -153,38 +159,44 @@ export const PokemonScreen = ({navigation, route}: Props) => {
 
       <View style={{ height: 20 }} />
 
+
+      {pokemon.moves.length > 0 && <Text style={styles.subTitle}>Moves</Text>}
+
+      {pokemon.moves.length > 0 &&
       
-      <Text style={styles.subTitle}>Moves</Text>
+          <FlatList
+          data={pokemon.moves}
+          keyExtractor={item => item.name}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item})=>{
+            return (
+            <View style={styles.statsContainer}>
+              <Text style={{flex: 1, color: 'white'}}>
+                {Formatter.capitalize(item.name)}
+              </Text>
+              <Text style={{color: 'white'}}>lvl {item.level}</Text>
+            </View>
+          )}}
+          />
+      }
 
-      <FlatList
-      data={pokemon.moves}
-      keyExtractor={item => item.name}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      renderItem={({item})=>(
-        <View style={styles.statsContainer}>
-          <Text style={{flex: 1, color: 'white'}}>
-            {Formatter.capitalize(item.name)}
-          </Text>
-          <Text style={{color: 'white'}}>lvl {item.level}</Text>
-        </View>
-      )}
-      />
-
-      <View style={{ height: 20 }} />
+      {pokemon.moves.length > 0 && <View style={{ height: 20 }} />}
 
 
       <Text style={styles.subTitle}>Games</Text>
 
       <FlatList
-
-        data={pokemon.games}
+// ?? ['No games']
+        data={pokemon.games.length > 0 ? pokemon.games : ['No games'] }
         horizontal
         keyExtractor={item => item}
         showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
+        renderItem={({item}) => {
+          
+          return (
           <Chip style={{marginLeft: 10}} selectedColor={theme.colors.text}>{Formatter.capitalize(item)}</Chip>
-        )}
+        )}}
 
       />
 
@@ -232,6 +244,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginHorizontal: 20,
     marginTop: 20,
+    marginBottom: 10,
   },
   statsContainer: {
     flexDirection: 'column',
