@@ -1,11 +1,11 @@
 import { createContext, PropsWithChildren } from "react";
-
+import Icon from "@react-native-vector-icons/ionicons";
 import {
     NavigationContainer,
     DarkTheme as NavigationDarkTheme,
     DefaultTheme as NavigationDefaultTheme,
   } from '@react-navigation/native';
-
+type IoniconNames = 'add' | 'search' | string
 
 import { adaptNavigationTheme,
     MD3DarkTheme,
@@ -52,7 +52,11 @@ export const ThemeContextProvider = ({ children }: PropsWithChildren) => {
     }
     
     return (
-        <PaperProvider theme={CombinedTheme}  >
+        <PaperProvider 
+        settings={{
+          icon: ({name, color, size, ...rest}: {name: string; color?: string; size: number;}) => <Icon name ={name as any} size={size} color={color || 'black'} {...rest}/>,
+        }}
+        theme={CombinedTheme}  >
             <NavigationContainer theme={CombinedTheme}>
             <ThemeContext.Provider value={{
               isDark,

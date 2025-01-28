@@ -47,7 +47,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
     )
   }
 
-  // console.log(pokemon.color)
+  console.log(pokemon.sprites)
 
   return (
     <ScrollView

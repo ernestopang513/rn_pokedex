@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, StyleSheet, useWindowDimensions, View, ImageBackground } from 'react-native';
-import { Text } from "react-native-paper"
+import { FAB, Text } from "react-native-paper"
 import { getPokemons } from "../../../actions/pokemons"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { PokeballBg } from "../../components/ui/PokeballBg"
@@ -8,8 +8,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { PokemonCard } from "../../components/pokemons/PokemonCard"
 import { useContext } from "react"
 import { ThemeContext } from "../../context/ThemeContext"
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParams } from '../../navigator/StackNavigator';
 
-export const HomeScreen = () => {
+interface Props extends StackScreenProps<RootStackParams, 'HomeScreen'>{}
+
+export const HomeScreen = ({navigation}: Props) => {
 
   const {top} = useSafeAreaInsets();
   const {height} = useWindowDimensions();
@@ -27,7 +31,6 @@ export const HomeScreen = () => {
   //! Sí no, no infiere el tipo de dato de pokémon
   const { isLoading, data, fetchNextPage}  = useInfiniteQuery({
     queryKey: ['pokemon', 'infinite'],
-    staleTime: 1000 * 60 * 60, // 60 minutos
     // getNextPageParam: ( lastPage, pages) => pages.length,
     initialPageParam: 0,
     // queryFn: (params) => getPokemons(params.pageParam),
@@ -41,6 +44,7 @@ export const HomeScreen = () => {
       return pokemons;
     },
     getNextPageParam: ( lastPage, pages) => pages.length,
+    staleTime: 1000 * 60 * 60, // 60 minutos
   });
 
   
@@ -75,6 +79,12 @@ export const HomeScreen = () => {
           )}
         />
 
+        <FAB
+          style={[globalTheme.fab]}
+          icon={'search'}
+          mode='elevated'
+          onPress={()=> navigation.push('SearchScreen')}
+        />
     </View>
   )
 }
