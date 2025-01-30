@@ -1,12 +1,11 @@
 
 import { RouteProp, useRoute } from "@react-navigation/native"
-import { FlatList, Image, ScrollView, StyleSheet, useWindowDimensions, View } from "react-native"
-import { ActivityIndicator, Chip, Text } from "react-native-paper"
+import { FlatList, Image, ScrollView, StyleSheet, View } from "react-native"
+import { Chip, Text } from "react-native-paper"
 import { RootStackParams } from "../../navigator/StackNavigator"
 import { StackScreenProps } from "@react-navigation/stack"
 import { useQuery } from "@tanstack/react-query"
 import { getPokemonById } from "../../../actions/pokemons"
-import { Pokemon } from '../../../domain/entities/pokemon';
 import { FullScreenLoader } from "../../components/ui/FullScreenLoader"
 import { Formatter } from '../../../config/helpers/formatter';
 import { FadeInImage } from "../../components/ui/FadeInImage"
@@ -14,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useContext } from "react"
 import { ThemeContext } from "../../context/ThemeContext"
 import FastImage from "react-native-fast-image"
+import { transparent } from "react-native-paper/lib/typescript/styles/themes/v2/colors"
 
 interface Props extends StackScreenProps<RootStackParams, 'PokemonScreen'>{}
 
@@ -78,8 +78,8 @@ export const PokemonScreen = ({navigation, route}: Props) => {
           <Chip
             key={type}
             mode="outlined"
-            selectedColor={theme.colors.text}
-            style={{ marginLeft: 10 }}>
+            selectedColor='white'
+            style={{ marginLeft: 10 , backgroundColor: 'transparent'}}>
             {type}
           </Chip>
         ))}
@@ -132,7 +132,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
         keyExtractor={item => item}
         showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
-          <Chip style={{marginLeft: 10}} selectedColor={theme.colors.text}>{Formatter.capitalize(item)}</Chip>
+          <Chip style={{marginLeft: 10, backgroundColor: 'transparent'}} selectedColor='white' mode={'outlined'} >{Formatter.capitalize(item)}</Chip>
         )}
 
       />
@@ -148,7 +148,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
       horizontal
       showsHorizontalScrollIndicator={false}
       renderItem={({item})=>(
-        <View style={styles.statsContainer}>
+        <View style={[styles.statsContainer, {paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)'}]}>
           <Text style={{flex: 1, color: 'white'}}>
             {Formatter.capitalize(item.name)}
           </Text>
@@ -171,7 +171,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
           showsHorizontalScrollIndicator={false}
           renderItem={({item})=>{
             return (
-            <View style={styles.statsContainer}>
+            <View style={[styles.statsContainer, {paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.3)'}]}>
               <Text style={{flex: 1, color: 'white'}}>
                 {Formatter.capitalize(item.name)}
               </Text>
@@ -195,7 +195,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
         renderItem={({item}) => {
           
           return (
-          <Chip style={{marginLeft: 10}} selectedColor={theme.colors.text}>{Formatter.capitalize(item)}</Chip>
+          <Chip mode="outlined" style={{marginLeft: 10, backgroundColor: 'transparent'}} selectedColor='white'>{Formatter.capitalize(item)}</Chip>
         )}}
 
       />
