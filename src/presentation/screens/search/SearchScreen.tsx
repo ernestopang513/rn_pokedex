@@ -1,19 +1,20 @@
 
-import { FlatList, ScrollView, useWindowDimensions, View } from "react-native"
+import { FlatList, View } from "react-native"
 import { ActivityIndicator, Text, TextInput } from "react-native-paper"
 import { globalTheme } from "../../../config/theme/global-theme"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { PokemonCard } from "../../components/pokemons/PokemonCard"
-import { Pokemon } from "../../../domain/entities/pokemon"
-import { useContext, useMemo, useState } from 'react';
-import { ThemeContext } from "../../context/ThemeContext"
-import { useQueries, useQuery } from "@tanstack/react-query"
+import { useMemo, useState } from 'react';
+import { useQuery } from "@tanstack/react-query"
 import { getPokemonNamesWithId, getPokemonsByIds } from "../../../actions/pokemons"
 import { FullScreenLoader } from "../../components/ui/FullScreenLoader"
+import { useDebounceValue } from "../../hooks/useDebounceValue"
 
 export const SearchScreen = () => {
   const {top} = useSafeAreaInsets();
   const [term, setTerm] = useState('');
+
+  const debouncedValue = useDebounceValue(term)
 
   const {isLoading, data: pokemonNameList = []} = useQuery({
     queryKey: [ 'pokemons', 'all'],
@@ -25,20 +26,20 @@ export const SearchScreen = () => {
 
   const pokemonNameIdList = useMemo(() => {
 
-    if (!isNaN(Number(term))){
+    if (!isNaN(Number(debouncedValue))){
       const pokemon = pokemonNameList.find(
-        pokemon => pokemon.id === Number(term),
+        pokemon => pokemon.id === Number(debouncedValue),
       );
       return pokemon ? [pokemon]: [];
     }
 
-    if (term.length === 0 ) return [];
-    if (term.length < 3) return [];
+    if (debouncedValue.length === 0 ) return [];
+    if (debouncedValue.length < 3) return [];
 
-    return pokemonNameList.filter(pokemon => pokemon.name.includes(term.toLowerCase()))
+    return pokemonNameList.filter(pokemon => pokemon.name.includes(debouncedValue.toLowerCase()))
 
 
-  }, [term]);
+  }, [debouncedValue]);
 
   const {isLoading: isLoadingPokemons, data: pokemons = [] } = useQuery({
     queryKey: ['pokemons', 'by', pokemonNameIdList],
@@ -63,13 +64,14 @@ export const SearchScreen = () => {
 
       {isLoadingPokemons && <ActivityIndicator style={{paddingTop: 20}}/> }
 
-
+      {/* <Text>{JSON.stringify(pokemonNameIdList, null, 2)}</Text> */}
 
       <FlatList
         //Aqui data es un arreglo de tipo pokémon
         data={ pokemons}
         // En este KeyExtractor es de tipo iterativo e itera el arreglo que meto en data
-        keyExtractor={(pokemon,index)=> {console.log({pokemon: pokemon.id + ' '});  return `${pokemon.id}-${index}`}}
+        // keyExtractor={(pokemon,index)=> {console.log({pokemon: pokemon.id + ' '});  return `${pokemon.id}-${index}`}}
+        keyExtractor={(pokemon,index)=> (`${pokemon.id}-${index}`)}
         numColumns={2}
         style={{paddingTop: top + 20}}
         // En este caso tuve que usar el contentContainerStyle por que el ListFooterComponent se cortaba devido al paddingTop que toma

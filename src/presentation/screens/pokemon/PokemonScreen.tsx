@@ -47,7 +47,7 @@ export const PokemonScreen = ({navigation, route}: Props) => {
     )
   }
 
-  console.log(pokemon.id)
+  // console.log(pokemon.id)
 
   return (
     <ScrollView
